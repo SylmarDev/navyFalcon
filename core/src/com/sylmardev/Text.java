@@ -25,6 +25,6 @@ public class Text extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        bitmapfont.draw(batch, text, 100, 100);
+        bitmapfont.draw(batch, text, 240, 320);
     }
 }

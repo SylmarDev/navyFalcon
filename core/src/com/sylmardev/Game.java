@@ -5,7 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -27,45 +29,37 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 		Skin skin = new Skin(Gdx.files.internal("skin/files/uiskin.json"));
 
 		table = new Table();
 		table.setWidth(stage.getWidth());
-		table.align(Align.center|Align.top);
+		table.align(Align.center);
 
-		table.setPosition(0, Gdx.graphics.getHeight());
+		table.setPosition(0, Gdx.graphics.getHeight()/2);
 
-		startButton = new TextButton("New Game", skin);
+		startButton = new TextButton("New Game", skin, "default");
+        startButton.setWidth(500);
+        startButton.setHeight(50);
+
 		quitButton = new TextButton("Quit Game", skin);
+        quitButton.setWidth(200);
+        quitButton.setHeight(50);
 
-		table.add(startButton);
-		table.add(quitButton);
+        quitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
+
+		table.add(startButton).pad(10);
+		table.row();
+		table.add(quitButton).pad(10);
 
 		stage.addActor(table);
 
-		Text title = new Text("Navy Falcon");
-		stage.addActor(title);
-
-		final TextButton button = new TextButton("Click Me", skin, "default");
-		button.setWidth(200);
-		button.setHeight(50);
-
-		final Dialog dialog = new Dialog("Click Message", skin);
-
-		button.addListener(new ClickListener() { // none of this works like its supposed to
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				dialog.show(stage);
-				Timer.schedule(new Timer.Task() {
-					@Override
-					public void run() {
-						dialog.hide();
-					}
-				}, 5);
-			}
-		});
-
-		stage.addActor(button);
 		Gdx.input.setInputProcessor(stage); // re-set input processor whenever stage changes
 	}
 
